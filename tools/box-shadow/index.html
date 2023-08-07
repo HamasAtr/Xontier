@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xontier - Box shadow</title>
+</head>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+}
+
+.options {
+  margin-bottom: 10px;
+}
+
+.shadow-preview {
+  display: inline-block;
+  margin-bottom: 20px;
+  /* background-color: #f0f0f0; */
+  padding: 20px;
+}
+
+.shadow-box {
+  width: 200px;
+  height: 200px;
+  /* background-color: #f0f0f0; */
+  box-shadow: 5px 5px 10px #000;
+}
+
+.code-output {
+  text-align: left;
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.code-output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+#cssCode {
+  width: 100%;
+  height: 100px;
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  /* padding: 5px; */
+  font-family: monospace;
+}
+#copyBtn{
+    /* margin-top: 10px; */
+      /* padding: 1rem 3rem; */
+      cursor: pointer;
+      background-color: black;
+      color: white;
+      border: 1px solid black;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: bolder;
+      transition: all .3s ease-in;
+}
+#copyBtn:hover{
+    color: black;
+    background-color: white;
+}
+#shadowColor {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  /* border: 3px dotted var(--primary); */
+  /* border-radius: 50%; */
+
+}
+#shadowColor::-webkit-color-swatch {
+  border-radius: 50%;
+  border: 3px dashed #000000;
+}
+#shadowColor::-moz-color-swatch {
+  border-radius: 50%;
+  border: 3px dotted #000000;
+}
+</style>
+<body>
+    <div class="container">
+        <h2>Box Shadow Generator</h2>
+        <div class="options">
+          <label for="shadowColor">Shadow Color:</label>
+          <input type="color" id="shadowColor" value="#000000">
+          <label for="shadowBlur">Shadow Blur:</label>
+          <input type="range" id="shadowBlur" min="0" max="50" value="10">
+          <label for="shadowSpread">Shadow Spread:</label>
+          <input type="range" id="shadowSpread" min="0" max="50" value="0">
+          <label for="shadowX">Shadow X Offset:</label>
+          <input type="range" id="shadowX" min="-50" max="50" value="5">
+          <label for="shadowY">Shadow Y Offset:</label>
+          <input type="range" id="shadowY" min="-50" max="50" value="5">
+        </div>
+        <div class="shadow-preview" id="shadowPreview">
+          <div class="shadow-box" id="shadowBox"></div>
+        </div>
+        <div class="code-output">
+            <div class="code-output-header">
+              <span>Generated CSS Code</span>
+              <button id="copyBtn">Copy</button>
+            </div>
+            <textarea id="cssCode" readonly></textarea>
+          </div>
+      </div>
+      <script>
+const shadowColorInput = document.getElementById('shadowColor');
+const shadowBlurInput = document.getElementById('shadowBlur');
+const shadowSpreadInput = document.getElementById('shadowSpread');
+const shadowXInput = document.getElementById('shadowX');
+const shadowYInput = document.getElementById('shadowY');
+const shadowBox = document.getElementById('shadowBox');
+const cssCodeOutput = document.getElementById('cssCode');
+
+function updateBoxShadow() {
+  const color = shadowColorInput.value;
+  const blur = shadowBlurInput.value;
+  const spread = shadowSpreadInput.value;
+  const offsetX = shadowXInput.value;
+  const offsetY = shadowYInput.value;
+
+  const boxShadowValue = `${offsetX}px ${offsetY}px ${blur}px ${spread}px ${color}`;
+  shadowBox.style.boxShadow = boxShadowValue;
+
+  cssCodeOutput.value = `box-shadow: ${boxShadowValue};`;
+}
+
+shadowColorInput.addEventListener('input', updateBoxShadow);
+shadowBlurInput.addEventListener('input', updateBoxShadow);
+shadowSpreadInput.addEventListener('input', updateBoxShadow);
+shadowXInput.addEventListener('input', updateBoxShadow);
+shadowYInput.addEventListener('input', updateBoxShadow);
+
+updateBoxShadow();
+
+const copyBtn = document.getElementById('copyBtn');
+
+copyBtn.addEventListener('click', copyCode);
+
+function copyCode() {
+  cssCodeOutput.select();
+  document.execCommand('copy');
+  copyBtn.textContent = 'Copied!';
+  setTimeout(() => {
+    copyBtn.textContent = 'Copy';
+  }, 1000);
+}
+
+      </script>
+</body>
+</html>

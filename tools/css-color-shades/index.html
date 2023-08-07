@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <title>Xontier - Color Shades</title>
+  </head>
+  <style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    :root{
+        --text: #ffffff;
+        --background: #000000;
+        --primary: #8fb3ff;
+        --secondary: #001952;
+        --accent: #f199bf;
+        --step--3: clamp(0.64rem, calc(0.65rem + -0.01vw), 0.65rem);
+        --step--2: clamp(0.78rem, calc(0.78rem + 0.01vw), 0.80rem);
+        --step--1: clamp(0.94rem, calc(0.93rem + 0.03vw), 1.00rem);
+        --step-0: clamp(1.13rem, calc(1.11rem + 0.07vw), 1.25rem);
+        --step-1: clamp(1.35rem, calc(1.33rem + 0.12vw), 1.56rem);
+        --step-2: clamp(1.62rem, calc(1.58rem + 0.18vw), 1.95rem);
+        --step-3: clamp(1.94rem, calc(1.89rem + 0.27vw), 2.44rem);
+        --step-4: clamp(2.33rem, calc(2.25rem + 0.39vw), 3.05rem);
+        --step-5: clamp(2.80rem, calc(2.69rem + 0.56vw), 3.82rem);
+                
+    }
+    body .dark{
+
+        --text: #000000;
+        --background: #ffffff;
+        --primary: #8fb3ff;
+        --secondary: #ebf1ff;
+        --accent: #d41d6c;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    /* background-color: var(--background); */
+
+      
+    }
+    #baseColor {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  width: 60px;
+  height: 60px;
+  border: none;
+  cursor: pointer;
+  border: 3px dotted var(--primary);
+  border-radius: 50%;
+
+}
+#baseColor::-webkit-color-swatch {
+  border-radius: 50%;
+}
+#baseColor::-moz-color-swatch {
+  border-radius: 50%;
+}
+    .container {
+      text-align: center;
+      display: flex;
+    justify-content: baseline;
+    align-items: center;
+    flex-direction: column;
+    /* background-color: var(--background); */
+    }
+
+    #generateButton {
+      margin-top: 10px;
+      padding: 1rem 3rem;
+      cursor: pointer;
+      background-color: var(--primary);
+      border: none;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: bolder;
+    }
+
+    .shade {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-top: 3rem;
+      padding: .55rem 2rem;
+      margin-left: 4rem;
+
+    }
+    .btncopy{
+      margin-top: 24px;
+      padding: .5rem;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <input type="color" id="baseColor" />
+      <button id="generateButton">Generate Shades</button>
+      <div class="color-shades-container" id="shadesContainer"></div>
+      
+    </div>
+    <script>
+      const baseColorInput = document.getElementById("baseColor");
+      const generateButton = document.getElementById("generateButton");
+      const shadesContainer = document.getElementById("shadesContainer");
+
+      generateButton.addEventListener("click", generateShades);
+
+      function generateShades() {
+        shadesContainer.innerHTML = "";
+        const baseColor = baseColorInput.value;
+        const numShades = 10; // Number of shades to generate
+        const step = 20; // Value to increase/decrease brightness
+
+        for (let i = 0; i < numShades; i++) {
+          const shadeElement = document.createElement("div");
+          shadeElement.classList.add("shade");
+
+          const shadeColor = lightenOrDarkenColor(baseColor, i * step);
+          shadeElement.style.backgroundColor = shadeColor;
+
+          // Create a button to display the color value
+          const colorValueButton = document.createElement("button");
+          colorValueButton.textContent = shadeColor;
+          colorValueButton.className = "btncopy"
+          shadeElement.appendChild(colorValueButton);
+
+          // Add an event listener to the button to copy the color value to clipboard
+          colorValueButton.addEventListener("click", () => {
+            copyToClipboard(shadeColor);
+          });
+
+          shadesContainer.appendChild(shadeElement);
+        }
+      }
+
+      function lightenOrDarkenColor(color, amount) {
+        let usePound = false;
+        if (color[0] === "#") {
+          color = color.slice(1);
+          usePound = true;
+        }
+
+        const num = parseInt(color, 16);
+
+        let r = (num >> 16) + amount;
+        if (r > 255) r = 255;
+        else if (r < 0) r = 0;
+
+        let b = ((num >> 8) & 0x00ff) + amount;
+        if (b > 255) b = 255;
+        else if (b < 0) b = 0;
+
+        let g = (num & 0x0000ff) + amount;
+        if (g > 255) g = 255;
+        else if (g < 0) g = 0;
+
+        return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+      }
+      function copyToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        alert("Color value copied to clipboard!");
+      }
+    </script>
+  </body>
+</html>

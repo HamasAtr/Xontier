@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xontier - Color combination</title>
+</head>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+}
+
+.color-pickers {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.color-pickers label {
+  margin-right: 10px;
+}
+
+#colorCombinations {
+  margin-top: 20px;
+}
+
+.color-combination {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+</style>
+<body>
+    <div class="container">
+        <h2>Color Combination Generator</h2>
+        <div class="color-pickers">
+          <label for="baseColor">Base Color:</label>
+          <input type="color" id="baseColor">
+        </div>
+        <div class="color-pickers">
+          <label for="complementaryColor">Complementary Color:</label>
+          <input type="color" id="complementaryColor">
+        </div>
+        <div class="color-pickers">
+          <label for="analogousColor">Analogous Color:</label>
+          <input type="color" id="analogousColor">
+        </div>
+        <div class="color-pickers">
+          <label for="triadicColor">Triadic Color:</label>
+          <input type="color" id="triadicColor">
+        </div>
+        <div id="colorCombinations"></div>
+      </div>
+
+      <script>
+        const baseColorInput = document.getElementById('baseColor');
+const complementaryColorInput = document.getElementById('complementaryColor');
+const analogousColorInput = document.getElementById('analogousColor');
+const triadicColorInput = document.getElementById('triadicColor');
+const colorCombinations = document.getElementById('colorCombinations');
+
+baseColorInput.addEventListener('input', generateColorCombinations);
+complementaryColorInput.addEventListener('input', generateColorCombinations);
+analogousColorInput.addEventListener('input', generateColorCombinations);
+triadicColorInput.addEventListener('input', generateColorCombinations);
+
+function generateColorCombinations() {
+  const baseColor = baseColorInput.value;
+  const complementaryColor = complementaryColorInput.value;
+  const analogousColor = analogousColorInput.value;
+  const triadicColor = triadicColorInput.value;
+
+  const combinations = [
+    { name: 'Base Color', value: baseColor },
+    { name: 'Complementary Color', value: complementaryColor },
+    { name: 'Analogous Color', value: analogousColor },
+    { name: 'Triadic Color', value: triadicColor }
+  ];
+
+  colorCombinations.innerHTML = '';
+
+  combinations.forEach(combination => {
+    const colorCombinationElement = document.createElement('div');
+    colorCombinationElement.classList.add('color-combination');
+    colorCombinationElement.style.backgroundColor = combination.value;
+    colorCombinationElement.textContent = `${combination.name}: ${combination.value}`;
+
+    colorCombinations.appendChild(colorCombinationElement);
+  });
+}
+
+      </script>
+</body>
+</html>
